@@ -1,12 +1,12 @@
 #[derive(PartialEq, Debug)]
-enum Operators {
+pub enum Operators {
     PLUS,
     MINUS,
     MULTIPLY,
     DIVIDE
 }
 
-fn find_operator_from(symbol: &char) -> Option<Operators> {
+pub fn find_operator_from(symbol: &char) -> Option<Operators> {
     match symbol {
         &'+' => Some(Operators::PLUS),
         &'-' => Some(Operators::MINUS),
