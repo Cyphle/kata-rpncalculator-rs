@@ -8,7 +8,7 @@ pub struct Operation {
 
 #[derive(Debug, PartialEq)]
 pub struct Operand {
-    value: String,
+    value: Option<String>,
     operation: Option<Operation>,
 }
 
@@ -22,6 +22,16 @@ pub fn build_operations_from(instructions: &Vec<String>) -> Operation {
         En fait, il faut walk through instruction et collect les instructions jusqu'à ce qu'on tombe sur une operation
         des qu'on trouve un operateur, on construit une operation
         faut update l'operation à retourner
+
+        let first = Operation {
+            operands: vec![init, 5, 2],
+            operator: Operators.MINUS
+        }
+
+        Operation {
+            operands: vec![first, 7],
+            operator: Operator.PLUS
+        }
      */
 
     let mut operands = vec![];
@@ -32,20 +42,23 @@ pub fn build_operations_from(instructions: &Vec<String>) -> Operation {
         match op {
             None => {
                 operands.push(i.clone())
-                // operation.operands.push(Operand {
-                //     value: i.clone(),
-                //     operation: None,
-                // })
             }
             Some(o) => {
+                let mut operation_operands: Vec<Operand> = vec![
+                    Operand {
+                        value: None,
+                        operation: Some(operation),
+                    }
+                ];
+                operands
+                    .iter()
+                    .for_each(|x| operation_operands.push(Operand {
+                        value: Some(x.clone()),
+                        operation: None,
+                    }));
+
                 operation = Operation {
-                    operands: operands
-                        .iter()
-                        .map(|x| Operand {
-                            value: x.clone(),
-                            operation: None,
-                        })
-                        .collect(),
+                    operands: operation_operands,
                     operator: o,
                 };
                 operands.clear()
@@ -71,11 +84,18 @@ mod build_operations_from_tests {
         assert_eq!(result, Operation {
             operands: vec![
                 Operand {
-                    value: "5".to_string(),
+                    value: None,
+                    operation: Some(Operation {
+                        operands: vec![],
+                        operator: Operators::IDENTITY,
+                    }),
+                },
+                Operand {
+                    value: Some("5".to_string()),
                     operation: None,
                 },
                 Operand {
-                    value: "3".to_string(),
+                    value: Some("3".to_string()),
                     operation: None,
                 },
             ],
@@ -93,11 +113,18 @@ mod build_operations_from_tests {
         assert_eq!(result, Operation {
             operands: vec![
                 Operand {
-                    value: "6".to_string(),
+                    value: None,
+                    operation: Some(Operation {
+                        operands: vec![],
+                        operator: Operators::IDENTITY,
+                    }),
+                },
+                Operand {
+                    value: Some("6".to_string()),
                     operation: None,
                 },
                 Operand {
-                    value: "2".to_string(),
+                    value: Some("2".to_string()),
                     operation: None,
                 },
             ],
