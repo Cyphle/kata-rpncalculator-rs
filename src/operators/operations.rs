@@ -34,34 +34,34 @@ pub fn build_operations_from(instructions: &Vec<String>) -> Operation {
         }
      */
 
-    let mut operands = vec![];
+    let mut raw_operands = vec![];
     for i in instructions {
         let i_as_char = i.chars().nth(0).unwrap();
         let op = find_operator_from(&i_as_char);
 
         match op {
             None => {
-                operands.push(i.clone())
+                raw_operands.push(i.clone())
             }
             Some(o) => {
-                let mut operation_operands: Vec<Operand> = vec![
+                let mut operands: Vec<Operand> = vec![
                     Operand {
                         value: None,
                         operation: Some(operation),
                     }
                 ];
-                operands
+                raw_operands
                     .iter()
-                    .for_each(|x| operation_operands.push(Operand {
+                    .for_each(|x| operands.push(Operand {
                         value: Some(x.clone()),
                         operation: None,
                     }));
 
                 operation = Operation {
-                    operands: operation_operands,
+                    operands,
                     operator: o,
                 };
-                operands.clear()
+                raw_operands.clear()
             }
         }
     }
@@ -135,16 +135,47 @@ mod build_operations_from_tests {
     #[test]
     fn should_build_an_operation_when_two_operations() {
         // 5 2 - 7 + => (5 2 -) 7 + => (5 - 2) + 7 => 10
-        /*
-        struct Operation {
-            left_operand: Operation,
-            right_operand: Option<Operation>,
-            operator: Operators
-        }
+        let instructions = vec![
+            "5".to_string(),
+            "2".to_string(),
+            "-".to_string(),
+            "7".to_string(),
+            "+".to_string()
+        ];
 
-        Il faudrait un Operators::Identity
-        et il faudrait walk through vec
+        let result = build_operations_from(&instructions);
 
-         */
+        assert_eq!(result, Operation {
+            operands: vec![
+                Operand {
+                    value: None,
+                    operation: Some(Operation {
+                        operands: vec![
+                            Operand {
+                                value: None,
+                                operation: Some(Operation {
+                                    operands: vec![],
+                                    operator: Operators::IDENTITY,
+                                })
+                            },
+                            Operand {
+                                value: Some("5".to_string()),
+                                operation: None,
+                            },
+                            Operand {
+                                value: Some("2".to_string()),
+                                operation: None,
+                            }
+                        ],
+                        operator: Operators::MINUS
+                    })
+                },
+                Operand {
+                    value: Some("7".to_string()),
+                    operation: None,
+                }
+            ],
+            operator: Operators::PLUS
+        })
     }
 }
