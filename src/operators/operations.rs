@@ -2,36 +2,43 @@ use crate::operators::{find_operator_from, Operators};
 
 #[derive(Debug, PartialEq)]
 pub struct Operation {
-    operands: Vec<String>,
-    operator: Operators
+    operands: Vec<Operand>,
+    operator: Operators,
+}
+
+#[derive(Debug, PartialEq)]
+pub struct Operand {
+    value: String,
+    operation: Option<Operation>,
 }
 
 pub fn build_operations_from(instructions: &Vec<String>) -> Operation {
-    let mut operands: Vec<String> = vec![];
-    let mut operator: Operators = Operators::PLUS;
+    let mut operation = Operation {
+        operands: vec![],
+        operator: Operators::IDENTITY,
+    };
 
     for i in instructions {
-        if i.len() > 1 {
-            operands.push(i.clone());
-        } else {
-            let i_as_char = i.chars().nth(0).unwrap();
-            let op = find_operator_from(&i_as_char);
-            match op {
-                None => { operands.push(i.clone())}
-                Some(o) => { operator = o }
+        let i_as_char = i.chars().nth(0).unwrap();
+        let op = find_operator_from(&i_as_char);
+
+        match op {
+            None => {
+                operation.operands.push(Operand {
+                    value: i.clone(),
+                    operation: None,
+                })
             }
+            Some(o) => { operation.operator = o }
         }
     }
 
-    Operation {
-        operands,
-        operator
-    }
+    operation
 }
 
 #[cfg(test)]
 mod build_operations_from_tests {
-    use crate::operators::operations::{build_operations_from, Operation};
+    use crate::operators::operations::{build_operations_from, Operand, Operation};
     use crate::operators::Operators;
 
     #[test]
@@ -42,8 +49,17 @@ mod build_operations_from_tests {
         let result = build_operations_from(&instructions);
 
         assert_eq!(result, Operation {
-            operands: vec!["5".to_string(), "3".to_string()],
-            operator: Operators::PLUS
+            operands: vec![
+                Operand {
+                    value: "5".to_string(),
+                    operation: None,
+                },
+                Operand {
+                    value: "3".to_string(),
+                    operation: None,
+                }
+            ],
+            operator: Operators::PLUS,
         })
     }
 
@@ -55,8 +71,17 @@ mod build_operations_from_tests {
         let result = build_operations_from(&instructions);
 
         assert_eq!(result, Operation {
-            operands: vec!["6".to_string(), "2".to_string()],
-            operator: Operators::DIVIDE
+            operands: vec![
+                Operand {
+                    value: "6".to_string(),
+                    operation: None,
+                },
+                Operand {
+                    value: "2".to_string(),
+                    operation: None,
+                }
+            ],
+            operator: Operators::DIVIDE,
         })
     }
 

@@ -3,7 +3,8 @@ pub enum Operators {
     PLUS,
     MINUS,
     MULTIPLY,
-    DIVIDE
+    DIVIDE,
+    IDENTITY
 }
 
 pub fn find_operator_from(symbol: &char) -> Option<Operators> {
