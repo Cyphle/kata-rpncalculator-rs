@@ -18,18 +18,38 @@ pub fn build_operations_from(instructions: &Vec<String>) -> Operation {
         operator: Operators::IDENTITY,
     };
 
+    /*
+        En fait, il faut walk through instruction et collect les instructions jusqu'à ce qu'on tombe sur une operation
+        des qu'on trouve un operateur, on construit une operation
+        faut update l'operation à retourner
+     */
+
+    let mut operands = vec![];
     for i in instructions {
         let i_as_char = i.chars().nth(0).unwrap();
         let op = find_operator_from(&i_as_char);
 
         match op {
             None => {
-                operation.operands.push(Operand {
-                    value: i.clone(),
-                    operation: None,
-                })
+                operands.push(i.clone())
+                // operation.operands.push(Operand {
+                //     value: i.clone(),
+                //     operation: None,
+                // })
             }
-            Some(o) => { operation.operator = o }
+            Some(o) => {
+                operation = Operation {
+                    operands: operands
+                        .iter()
+                        .map(|x| Operand {
+                            value: x.clone(),
+                            operation: None,
+                        })
+                        .collect(),
+                    operator: o,
+                };
+                operands.clear()
+            }
         }
     }
 
@@ -57,7 +77,7 @@ mod build_operations_from_tests {
                 Operand {
                     value: "3".to_string(),
                     operation: None,
-                }
+                },
             ],
             operator: Operators::PLUS,
         })
@@ -79,7 +99,7 @@ mod build_operations_from_tests {
                 Operand {
                     value: "2".to_string(),
                     operation: None,
-                }
+                },
             ],
             operator: Operators::DIVIDE,
         })
