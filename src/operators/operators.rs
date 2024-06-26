@@ -17,25 +17,16 @@ pub fn find_operator_from(symbol: &char) -> Option<Operators> {
     }
 }
 
-// TODO to be tested et changer en floatant
-pub fn apply_operation_i64(operator: Operators, first_operand: i64, second_operand: i64) -> i64 {
-    match operator {
-        Operators::PLUS => { first_operand + second_operand }
-        Operators::MINUS => { first_operand - second_operand }
-        Operators::MULTIPLY => { first_operand * second_operand }
-        Operators::DIVIDE => { first_operand / second_operand }
-        Operators::IDENTITY => { first_operand }
-    }
-}
-
 pub fn apply_operation(operator: Operators, first_operand: f32, second_operand: f32) -> f32 {
-    match operator {
+    let result = match operator {
         Operators::PLUS => { first_operand + second_operand }
         Operators::MINUS => { first_operand - second_operand }
         Operators::MULTIPLY => { first_operand * second_operand }
         Operators::DIVIDE => { first_operand / second_operand }
         Operators::IDENTITY => { first_operand }
-    }
+    };
+
+    (result  * 100.0).round() / 100.0
 }
 
 #[cfg(test)]
@@ -99,8 +90,8 @@ mod find_operator_from_tests {
             let res1 = apply_operation(Operators::PLUS, 1.0, 2.0);
             let res2 = apply_operation(Operators::PLUS, 1.3, 4.3);
 
-            assert_eq!(res1, 3.0);
-            assert_eq!(res2, 5.6);
+            assert_eq!(res1, 3.00);
+            assert_eq!(res2, 5.60);
         }
 
         #[test]
@@ -108,8 +99,26 @@ mod find_operator_from_tests {
             let res1 = apply_operation(Operators::MINUS, 1.0, 2.0);
             let res2 = apply_operation(Operators::MINUS, 9.3, 4.3);
 
-            assert_eq!(res1, -1.0);
-            assert_eq!(res2, 5.0);
+            assert_eq!(res1, -1.00);
+            assert_eq!(res2, 5.00);
+        }
+
+        #[test]
+        fn should_apply_multiplication() {
+            let res1 = apply_operation(Operators::MULTIPLY, 1.0, 2.0);
+            let res2 = apply_operation(Operators::MULTIPLY, 9.3, 4.3);
+
+            assert_eq!(res1, 2.00);
+            assert_eq!(res2, 39.99);
+        }
+
+        #[test]
+        fn should_apply_division() {
+            let res1 = apply_operation(Operators::DIVIDE, 1.0, 2.0);
+            let res2 = apply_operation(Operators::DIVIDE, 9.3, 4.3);
+
+            assert_eq!(res1, 0.50);
+            assert_eq!(res2, 2.16);
         }
     }
 }
