@@ -1,4 +1,5 @@
 use crate::operators::{find_operator_from, Operators};
+use crate::operators::operators::apply_operation;
 
 #[derive(Debug, PartialEq)]
 pub struct Operation {
@@ -71,13 +72,7 @@ Puis on a une nouvelle série avec les n-3-k et les n+m
                 let second_operand = instructions.iter().nth(index - 1).unwrap().parse::<i64>().unwrap();
 
                 // TODO extraire ces calculs
-                let result = match ope {
-                    Operators::PLUS => { first_operand + second_operand }
-                    Operators::MINUS => { first_operand - second_operand }
-                    Operators::MULTIPLY => { first_operand * second_operand }
-                    Operators::DIVIDE => { first_operand / second_operand }
-                    Operators::IDENTITY => { first_operand }
-                };
+                let result = apply_operation(ope, first_operand, second_operand);
 
                 &instructions[0..(index-2)].iter().for_each(|x| new_instructions.push(x.clone()));
                 new_instructions.push(result.to_string());

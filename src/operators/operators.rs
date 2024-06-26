@@ -17,6 +17,16 @@ pub fn find_operator_from(symbol: &char) -> Option<Operators> {
     }
 }
 
+pub fn apply_operation(operator: Operators, first_operand: i64, second_operand: i64) -> i64 {
+    match operator {
+        Operators::PLUS => { first_operand + second_operand }
+        Operators::MINUS => { first_operand - second_operand }
+        Operators::MULTIPLY => { first_operand * second_operand }
+        Operators::DIVIDE => { first_operand / second_operand }
+        Operators::IDENTITY => { first_operand }
+    }
+}
+
 #[cfg(test)]
 mod find_operator_from_tests {
     use crate::operators::operators::find_operator_from;
