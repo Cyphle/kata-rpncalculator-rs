@@ -4,7 +4,7 @@ pub enum Operators {
     MINUS,
     MULTIPLY,
     DIVIDE,
-    IDENTITY
+    IDENTITY // TODO je pense qu'en fait identity y a pas besoin
 }
 
 pub fn find_operator_from(symbol: &char) -> Option<Operators> {
