@@ -63,6 +63,7 @@ Puis on a une nouvelle série avec les n-3-k et les n+m
  */
     let mut new_instructions: Vec<String> = vec![];
     for (index, instruction) in instructions.iter().enumerate() {
+        // TODO faudrait virer le unwrap c'est not safe
         let instruction_first_char = instruction.chars().nth(0).unwrap();
         let operator = find_operator_from(&instruction_first_char);
         match operator {
