@@ -67,8 +67,8 @@ Puis on a une nouvelle série avec les n-3-k et les n+m
         match operator {
             None => {}
             Some(ope) => {
-                let first_operand = instructions.iter().nth(index - 1).unwrap().parse::<i64>().unwrap();
-                let second_operand = instructions.iter().nth(index - 2).unwrap().parse::<i64>().unwrap();
+                let first_operand = instructions.iter().nth(index - 2).unwrap().parse::<i64>().unwrap();
+                let second_operand = instructions.iter().nth(index - 1).unwrap().parse::<i64>().unwrap();
 
                 // TODO extraire ces calculs
                 let result = match ope {
@@ -110,81 +110,31 @@ mod build_operations_from_tests {
             assert_eq!(result, vec!["8".to_string()])
         }
 
-        // #[test]
-        // fn should_build_an_operation_from_simple_instructions_when_divide() {
-        //     // 6 2 / => 6/2 => 3
-        //     let instructions = vec!["6".to_string(), "2".to_string(), "/".to_string()];
-        //
-        //     let result = build_operations_from(&instructions);
-        //
-        //     assert_eq!(result, Operation {
-        //         operands: vec![
-        //             Operand {
-        //                 value: None,
-        //                 operation: Some(Operation {
-        //                     operands: vec![],
-        //                     operator: Operators::IDENTITY,
-        //                 }),
-        //             },
-        //             Operand {
-        //                 value: Some("6".to_string()),
-        //                 operation: None,
-        //             },
-        //             Operand {
-        //                 value: Some("2".to_string()),
-        //                 operation: None,
-        //             },
-        //         ],
-        //         operator: Operators::DIVIDE,
-        //     })
-        // }
-        //
-        // #[test]
-        // fn should_build_an_operation_when_two_operations() {
-        //     // 5 2 - 7 + => (5 2 -) 7 + => (5 - 2) + 7 => 10
-        //     let instructions = vec![
-        //         "5".to_string(),
-        //         "2".to_string(),
-        //         "-".to_string(),
-        //         "7".to_string(),
-        //         "+".to_string(),
-        //     ];
-        //
-        //     let result = build_operations_from(&instructions);
-        //
-        //     assert_eq!(result, Operation {
-        //         operands: vec![
-        //             Operand {
-        //                 value: None,
-        //                 operation: Some(Operation {
-        //                     operands: vec![
-        //                         Operand {
-        //                             value: None,
-        //                             operation: Some(Operation {
-        //                                 operands: vec![],
-        //                                 operator: Operators::IDENTITY,
-        //                             }),
-        //                         },
-        //                         Operand {
-        //                             value: Some("5".to_string()),
-        //                             operation: None,
-        //                         },
-        //                         Operand {
-        //                             value: Some("2".to_string()),
-        //                             operation: None,
-        //                         },
-        //                     ],
-        //                     operator: Operators::MINUS,
-        //                 }),
-        //             },
-        //             Operand {
-        //                 value: Some("7".to_string()),
-        //                 operation: None,
-        //             },
-        //         ],
-        //         operator: Operators::PLUS,
-        //     })
-        // }
+        #[test]
+        fn should_build_an_operation_from_simple_instructions_when_divide() {
+            // 6 2 / => 6/2 => 3
+            let instructions = vec!["6".to_string(), "2".to_string(), "/".to_string()];
+
+            let result = build_operations_from(&instructions);
+
+            assert_eq!(result, vec!["3".to_string()])
+        }
+
+        #[test]
+        fn should_build_an_operation_when_two_operations() {
+            // 5 2 - 7 + => (5 2 -) 7 + => (5 - 2) + 7 => 10
+            let instructions = vec![
+                "5".to_string(),
+                "2".to_string(),
+                "-".to_string(),
+                "7".to_string(),
+                "+".to_string(),
+            ];
+
+            let result = build_operations_from(&instructions);
+
+            assert_eq!(result, vec!["3".to_string(), "7".to_string(), "+".to_string()])
+        }
     }
 
     mod build_operations_old {
