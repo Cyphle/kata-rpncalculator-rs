@@ -84,7 +84,11 @@ Puis on a une nouvelle série avec les n-3-k et les n+m
         };
     }
 
-    return new_instructions;
+    if new_instructions.len() > 1 {
+        build_operations_from(&new_instructions)
+    } else {
+        new_instructions
+    }
 }
 
 #[cfg(test)]
@@ -129,7 +133,7 @@ mod build_operations_from_tests {
 
             let result = build_operations_from(&instructions);
 
-            assert_eq!(result, vec!["3".to_string(), "7".to_string(), "+".to_string()])
+            assert_eq!(result, vec!["10".to_string()])
         }
     }
 
