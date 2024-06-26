@@ -17,6 +17,7 @@ pub fn find_operator_from(symbol: &char) -> Option<Operators> {
     }
 }
 
+// TODO to be tested
 pub fn apply_operation(operator: Operators, first_operand: i64, second_operand: i64) -> i64 {
     match operator {
         Operators::PLUS => { first_operand + second_operand }

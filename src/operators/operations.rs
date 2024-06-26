@@ -68,10 +68,10 @@ Puis on a une nouvelle série avec les n-3-k et les n+m
         match operator {
             None => {}
             Some(ope) => {
+                // TODO faudrait virer les unwrap c'est not safe
                 let first_operand = instructions.iter().nth(index - 2).unwrap().parse::<i64>().unwrap();
                 let second_operand = instructions.iter().nth(index - 1).unwrap().parse::<i64>().unwrap();
 
-                // TODO extraire ces calculs
                 let result = apply_operation(ope, first_operand, second_operand);
 
                 &instructions[0..(index-2)].iter().for_each(|x| new_instructions.push(x.clone()));
