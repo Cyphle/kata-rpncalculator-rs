@@ -101,7 +101,7 @@ mod build_operations_from_tests {
         use crate::operators::Operators;
 
         #[test]
-        fn should_build_an_operation_from_simple_instructions() {
+        fn should_apply_operation_from_simple_instructions() {
             // 5 3 + => 5+3 => 8
             let instructions = vec!["5".to_string(), "3".to_string(), "+".to_string()];
 
@@ -111,7 +111,7 @@ mod build_operations_from_tests {
         }
 
         #[test]
-        fn should_build_an_operation_from_simple_instructions_when_divide() {
+        fn should_apply_operation_from_simple_instructions_when_divide() {
             // 6 2 / => 6/2 => 3
             let instructions = vec!["6".to_string(), "2".to_string(), "/".to_string()];
 
@@ -121,7 +121,7 @@ mod build_operations_from_tests {
         }
 
         #[test]
-        fn should_build_an_operation_when_two_operations() {
+        fn should_apply_operation_when_two_operations() {
             // 5 2 - 7 + => (5 2 -) 7 + => (5 - 2) + 7 => 10
             let instructions = vec![
                 "5".to_string(),
@@ -134,6 +134,11 @@ mod build_operations_from_tests {
             let result = build_operations_from(&instructions);
 
             assert_eq!(result, vec!["10".to_string()])
+        }
+
+        #[test]
+        fn should_apply_operation_when_multiple_operations() {
+            // - 3 4 2 1 + x + 2 / => (3 + (4 x (2+1)))/2 => 7.5
         }
     }
 
