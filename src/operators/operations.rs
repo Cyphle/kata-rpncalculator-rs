@@ -1,17 +1,5 @@
-use crate::operators::{find_operator_from, Operators};
+use crate::operators::find_operator_from;
 use crate::operators::operators::apply_operation;
-
-#[derive(Debug, PartialEq)]
-pub struct Operation {
-    operands: Vec<Operand>,
-    operator: Operators,
-}
-
-#[derive(Debug, PartialEq)]
-pub struct Operand {
-    value: Option<String>,
-    operation: Option<Operation>,
-}
 
 pub fn string_to_f32(to_parse: &String) -> f32 {
     match to_parse.parse::<f32>() {
