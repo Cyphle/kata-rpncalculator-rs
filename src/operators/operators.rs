@@ -4,7 +4,6 @@ pub enum Operators {
     MINUS,
     MULTIPLY,
     DIVIDE,
-    IDENTITY // TODO je pense qu'en fait identity y a pas besoin
 }
 
 pub fn find_operator_from(symbol: &char) -> Option<Operators> {
@@ -23,7 +22,6 @@ pub fn apply_operation(operator: Operators, first_operand: f32, second_operand: 
         Operators::MINUS => { first_operand - second_operand }
         Operators::MULTIPLY => { first_operand * second_operand }
         Operators::DIVIDE => { first_operand / second_operand }
-        Operators::IDENTITY => { first_operand }
     };
 
     (result  * 100.0).round() / 100.0
