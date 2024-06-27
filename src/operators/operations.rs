@@ -13,20 +13,36 @@ pub struct Operand {
     operation: Option<Operation>,
 }
 
+pub fn string_to_f32(to_parse: &String) -> f32 {
+    match to_parse.parse::<f32>() {
+        Ok(value) => value,
+        Err(e) => panic!("Cannot parse {to_parse}: {e}")
+    }
+}
+
+fn get_instruction_at(instructions: &Vec<String>, index: usize) -> &String {
+    match instructions.iter().nth(index) {
+        Some(instruction) => instruction,
+        None => panic!("No left operand found")
+    }
+}
+
 pub fn apply_calculation(instructions: &Vec<String>) -> Vec<String> {
+    const LEFT_OPERAND_INDEX: usize= 2;
+    const RIGHT_OPERAND_INDEX: usize = 1;
+
     let mut new_instructions: Vec<String> = vec![];
     for (index, instruction) in instructions.iter().enumerate() {
-        // TODO faudrait virer le unwrap c'est not safe
-        let instruction_first_char = instruction.chars().nth(0).unwrap();
+        let instruction_first_char = instruction.chars().nth(0).unwrap_or_else(|| '.');
         let operator = find_operator_from(&instruction_first_char);
+
         match operator {
             None => {}
             Some(ope) => {
-                // TODO faudrait virer les unwrap c'est not safe
-                let first_operand = instructions.iter().nth(index - 2).unwrap().parse::<f32>().unwrap();
-                let second_operand = instructions.iter().nth(index - 1).unwrap().parse::<f32>().unwrap();
+                let left_operand = string_to_f32(get_instruction_at(instructions, index - LEFT_OPERAND_INDEX));
+                let right_operand = string_to_f32(get_instruction_at(instructions, index - RIGHT_OPERAND_INDEX));
 
-                let result = apply_operation(ope, first_operand, second_operand);
+                let result = apply_operation(left_operand, right_operand, ope);
 
                 let _ = &instructions[0..(index-2)].iter().for_each(|x| new_instructions.push(x.clone()));
                 new_instructions.push(result.to_string());

@@ -16,12 +16,12 @@ pub fn find_operator_from(symbol: &char) -> Option<Operators> {
     }
 }
 
-pub fn apply_operation(operator: Operators, first_operand: f32, second_operand: f32) -> f32 {
+pub fn apply_operation(left_operand: f32, right_operand: f32, operator: Operators) -> f32 {
     let result = match operator {
-        Operators::PLUS => { first_operand + second_operand }
-        Operators::MINUS => { first_operand - second_operand }
-        Operators::MULTIPLY => { first_operand * second_operand }
-        Operators::DIVIDE => { first_operand / second_operand }
+        Operators::PLUS => { left_operand + right_operand }
+        Operators::MINUS => { left_operand - right_operand }
+        Operators::MULTIPLY => { left_operand * right_operand }
+        Operators::DIVIDE => { left_operand / right_operand }
     };
 
     (result  * 100.0).round() / 100.0
@@ -85,8 +85,8 @@ mod find_operator_from_tests {
 
         #[test]
         fn should_apply_addition() {
-            let res1 = apply_operation(Operators::PLUS, 1.0, 2.0);
-            let res2 = apply_operation(Operators::PLUS, 1.3, 4.3);
+            let res1 = apply_operation(1.0, 2.0, Operators::PLUS);
+            let res2 = apply_operation(1.3, 4.3, Operators::PLUS);
 
             assert_eq!(res1, 3.00);
             assert_eq!(res2, 5.60);
@@ -94,8 +94,8 @@ mod find_operator_from_tests {
 
         #[test]
         fn should_apply_substraction() {
-            let res1 = apply_operation(Operators::MINUS, 1.0, 2.0);
-            let res2 = apply_operation(Operators::MINUS, 9.3, 4.3);
+            let res1 = apply_operation(1.0, 2.0, Operators::MINUS);
+            let res2 = apply_operation(9.3, 4.3, Operators::MINUS);
 
             assert_eq!(res1, -1.00);
             assert_eq!(res2, 5.00);
@@ -103,8 +103,8 @@ mod find_operator_from_tests {
 
         #[test]
         fn should_apply_multiplication() {
-            let res1 = apply_operation(Operators::MULTIPLY, 1.0, 2.0);
-            let res2 = apply_operation(Operators::MULTIPLY, 9.3, 4.3);
+            let res1 = apply_operation(1.0, 2.0, Operators::MULTIPLY);
+            let res2 = apply_operation(9.3, 4.3, Operators::MULTIPLY);
 
             assert_eq!(res1, 2.00);
             assert_eq!(res2, 39.99);
@@ -112,8 +112,8 @@ mod find_operator_from_tests {
 
         #[test]
         fn should_apply_division() {
-            let res1 = apply_operation(Operators::DIVIDE, 1.0, 2.0);
-            let res2 = apply_operation(Operators::DIVIDE, 9.3, 4.3);
+            let res1 = apply_operation(1.0, 2.0, Operators::DIVIDE);
+            let res2 = apply_operation(9.3, 4.3, Operators::DIVIDE);
 
             assert_eq!(res1, 0.50);
             assert_eq!(res2, 2.16);
