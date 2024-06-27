@@ -1,5 +1,5 @@
 use crate::operators::{find_operator_from, Operators};
-use crate::operators::operators::{apply_operation, apply_operation_i64};
+use crate::operators::operators::apply_operation;
 
 #[derive(Debug, PartialEq)]
 pub struct Operation {
@@ -54,13 +54,7 @@ pub fn build_operations_from_old(instructions: &Vec<String>) -> Operation {
     operation
 }
 
-pub fn build_operations_from(instructions: &Vec<String>) -> Vec<String> {
-    /*
-En fait, chaque operateur suit ses operandes donc l'algo n'est pas bon.
-Il faut walk through les instructions et déterminer s'il s'agit d'une operande ou d'un operateur
-Si on trouve un operateur, on applique au deux précédents
-Puis on a une nouvelle série avec les n-3-k et les n+m
- */
+pub fn apply_calculation(instructions: &Vec<String>) -> Vec<String> {
     let mut new_instructions: Vec<String> = vec![];
     for (index, instruction) in instructions.iter().enumerate() {
         // TODO faudrait virer le unwrap c'est not safe
@@ -75,9 +69,9 @@ Puis on a une nouvelle série avec les n-3-k et les n+m
 
                 let result = apply_operation(ope, first_operand, second_operand);
 
-                &instructions[0..(index-2)].iter().for_each(|x| new_instructions.push(x.clone()));
+                let _ = &instructions[0..(index-2)].iter().for_each(|x| new_instructions.push(x.clone()));
                 new_instructions.push(result.to_string());
-                &instructions[(index + 1)..instructions.len()].iter().for_each(|x| new_instructions.push(x.clone()));
+                let _ = &instructions[(index + 1)..instructions.len()].iter().for_each(|x| new_instructions.push(x.clone()));
 
                 break;
             }
@@ -85,7 +79,7 @@ Puis on a une nouvelle série avec les n-3-k et les n+m
     }
 
     if new_instructions.len() > 1 {
-        build_operations_from(&new_instructions)
+        apply_calculation(&new_instructions)
     } else {
         new_instructions
     }
@@ -94,14 +88,14 @@ Puis on a une nouvelle série avec les n-3-k et les n+m
 #[cfg(test)]
 mod build_operations_from_tests {
     mod build_operations {
-        use crate::operators::operations::build_operations_from;
+        use crate::operators::operations::apply_calculation;
 
         #[test]
         fn should_calculation_from_simple_instructions() {
             // 5 3 + => 5+3 => 8
             let instructions = vec!["5".to_string(), "3".to_string(), "+".to_string()];
 
-            let result = build_operations_from(&instructions);
+            let result = apply_calculation(&instructions);
 
             assert_eq!(result, vec!["8".to_string()])
         }
@@ -111,7 +105,7 @@ mod build_operations_from_tests {
             // 6 2 / => 6/2 => 3
             let instructions = vec!["6".to_string(), "2".to_string(), "/".to_string()];
 
-            let result = build_operations_from(&instructions);
+            let result = apply_calculation(&instructions);
 
             assert_eq!(result, vec!["3".to_string()])
         }
@@ -127,14 +121,67 @@ mod build_operations_from_tests {
                 "+".to_string(),
             ];
 
-            let result = build_operations_from(&instructions);
+            let result = apply_calculation(&instructions);
 
-            assert_eq!(result, vec!["10".to_string()])
+            assert_eq!(result, vec!["10".to_string()]);
         }
 
         #[test]
         fn should_calculation_when_multiple_operations() {
-            // - 3 4 2 1 + x + 2 / => (3 + (4 x (2+1)))/2 => 7.5
+            // 3 4 2 1 + x + 2 / => (3 + (4 x (2+1)))/2 => 7.5
+            let instructions = vec![
+                "3".to_string(),
+                "4".to_string(),
+                "2".to_string(),
+                "1".to_string(),
+                "+".to_string(),
+                "x".to_string(),
+                "+".to_string(),
+                "2".to_string(),
+                "/".to_string()
+            ];
+
+            let result = apply_calculation(&instructions);
+
+            assert_eq!(result, vec!["7.5".to_string()]);
+        }
+
+        #[test]
+        fn should_calculation_when_multiple_operations_again() {
+            // 1 2 + 4 × 5 + 3 − => ((1+2) x 4) + 5 - 3 => 14
+            let instructions = vec![
+                "1".to_string(),
+                "2".to_string(),
+                "+".to_string(),
+                "4".to_string(),
+                "x".to_string(),
+                "5".to_string(),
+                "+".to_string(),
+                "3".to_string(),
+                "-".to_string()
+            ];
+
+            let result = apply_calculation(&instructions);
+
+            assert_eq!(result, vec!["14".to_string()]);
+        }
+
+        #[test]
+        fn should_calculation_when_multiple_operations_and_again() {
+            // 5 4 1 2 + × + => 5 + (4 x (1+2)) => 17
+            let instructions = vec![
+                "5".to_string(),
+                "4".to_string(),
+                "1".to_string(),
+                "2".to_string(),
+                "+".to_string(),
+                "*".to_string(),
+                "+".to_string()
+            ];
+
+            let result = apply_calculation(&instructions);
+
+            assert_eq!(result, vec!["17".to_string()]);
         }
     }
 
