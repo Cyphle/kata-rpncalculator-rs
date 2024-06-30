@@ -10,7 +10,7 @@ pub fn find_operator_from(symbol: &char) -> Option<Operators> {
     match symbol {
         &'+' => Some(Operators::PLUS),
         &'-' => Some(Operators::MINUS),
-        &'*' | &'x' => Some(Operators::MULTIPLY),
+        &'*' | &'x' | &'×' => Some(Operators::MULTIPLY),
         &'/' => Some(Operators::DIVIDE),
         _ => None
     }

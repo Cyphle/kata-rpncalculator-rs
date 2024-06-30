@@ -31,4 +31,13 @@ mod calculate_with_rpn_tests {
 
         assert_eq!(result, 17.0);
     }
+
+    #[test]
+    fn should_calculation_when_multiple_operations_again() {
+        let operation = "3 4 2 1 + x + 2 /";
+
+        let result = calculate_with_rpn(&operation);
+
+        assert_eq!(result, 7.5);
+    }
 }
